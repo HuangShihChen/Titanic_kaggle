@@ -1936,60 +1936,6 @@ pd.concat((pd.DataFrame(dataTrain.iloc[:, 1:].columns, columns = ['variable']),
 
 
 ```python
-from sklearn.svm import SVC
-from sklearn.model_selection import GridSearchCV, cross_val_score, StratifiedKFold, learning_curve
-```
-
-
-```python
-dataTrain["Survived"].astype(int)
-y = dataTrain["Survived"]
-X = dataTrain.drop(labels =["Survived"], axis = 1)
-```
-
-
-```python
-from sklearn.model_selection import train_test_split
-X_train, X_cv, y_train, y_cv = train_test_split(X, y, test_size = 0.3)
-```
-
-
-```python
-from sklearn.preprocessing import StandardScaler
-sc = StandardScaler()
-sc.fit(X_train)
-X_train_normalized = sc.transform(X_train)
-X_cv_normalized = sc.transform(X_cv)
-```
-
-
-```python
-kfold = StratifiedKFold(n_splits=10)
-
-SVMC = SVC(probability=True)
-svc_param_grid = {'kernel': ['rbf'], 
-                  'gamma': [10**i for i in range(-2, 2)],
-                  'C': [10**i for i in range(-1, 2)]}
-
-gsSVMC = GridSearchCV(SVMC,param_grid = svc_param_grid, cv=kfold, scoring="accuracy", n_jobs= 2, verbose = 1)
-gsSVMC.fit(X_train_normalized, y_train.values.ravel())
-SVMC_best = gsSVMC.best_estimator_
-
-# Best score
-print(gsSVMC.best_score_)
-print(gsSVMC.best_params_)
-```
-
-    Fitting 10 folds for each of 12 candidates, totalling 120 fits
-    0.841091492777
-    {'C': 10, 'gamma': 0.01, 'kernel': 'rbf'}
-    
-
-    [Parallel(n_jobs=2)]: Done 120 out of 120 | elapsed:    5.0s finished
-    
-
-
-```python
 rf_res =  rf.predict(dataTest)
 submit['Survived'] = rf_res
 submit['Survived'] = submit['Survived'].astype(int)
